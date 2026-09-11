@@ -19,6 +19,14 @@
 
 <picture>
   <source
+    srcset="./profile/pin-dsh-tool-text-editor-dark.svg"
+    media="(prefers-color-scheme: dark)"
+  />
+  <img src="./profile/pin-dsh-tool-text-editor-light.svg" alt="dsh-tool-text-editor" />
+</picture>
+
+<picture>
+  <source
     srcset="./profile/pin-omnibox-dark.svg"
     media="(prefers-color-scheme: dark)"
   />
