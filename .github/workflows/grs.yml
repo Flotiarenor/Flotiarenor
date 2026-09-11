@@ -23,15 +23,25 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      # ---------- Stats 卡片：浅色 / 深色各一份 ----------
+      # ================= Stats 卡片 =================
+      # 参数逐条说明（全部已对线上实例实测通过）：
+      #   show_icons=true           每行统计前加图标
+      #   hide=stars                隐藏 "Total Stars Earned" 行
+      #   hide_rank=true            去掉右侧等级圆环，卡片自动变窄
+      #   hide_title=true           不要 "xxx GitHub Stats" 标题行
+      #   hide_border=true          去掉描边
+      #   include_all_commits=true  统计帐号创建至今的全部提交，而不是仅最近一年
+      #   show=...                  追加 3 行：历史贡献仓库数 / 发起的讨论 / 回答的讨论
+      #   locale=en                 必须保持 en！all_time_contribs 这个翻译键在上游
+      #                             translations.ts 里只有 en 一条，改成 cn 或 zh-tw
+      #                             会让整张卡渲染成 "Something went wrong"
       - name: Generate stats card (light)
         uses: stats-organization/github-readme-stats-action@v2
         with:
           card: stats
-          options: username=${{ github.repository_owner }}&show_icons=true&theme=light_github
+          options: "username=${{ github.repository_owner }}&show_icons=true&hide=stars&hide_rank=true&hide_title=true&hide_border=true&include_all_commits=true&show=all_time_contribs,discussions_started,discussions_answered&locale=en&theme=light_github"
           path: profile/stats-light.svg
-          # 私有仓库统计 / 私有贡献需要 PAT，见说明；
-          # 换成 ${{ secrets.GH_PAT }} 即可。
+          # 私有仓库统计 / 私有贡献需要 PAT，换成 ${{ secrets.GH_PAT }} 即可
           token: ${{ secrets.GITHUB_TOKEN }}
           # 命中 GitHub API 速率限制时直接失败，而不是提交一张 "Something went wrong" 的错误图
           fail_on_error: "true"
@@ -40,17 +50,22 @@ jobs:
         uses: stats-organization/github-readme-stats-action@v2
         with:
           card: stats
-          options: username=${{ github.repository_owner }}&show_icons=true&theme=dark_github
+          # 与浅色版逐字相同，只把结尾的 theme 换成 dark_github
+          options: "username=${{ github.repository_owner }}&show_icons=true&hide=stars&hide_rank=true&hide_title=true&hide_border=true&include_all_commits=true&show=all_time_contribs,discussions_started,discussions_answered&locale=en&theme=dark_github"
           path: profile/stats-dark.svg
           token: ${{ secrets.GITHUB_TOKEN }}
           fail_on_error: "true"
 
-      # ---------- 常用语言卡片：浅色 / 深色各一份 ----------
+      # ================= 语言卡片 =================
+      #   layout=compact            紧凑横条
+      #   langs_count=8             显示 8 门语言（1-20）
+      #   size_weight=0.5           官方推荐算法：同时考虑代码字节数和仓库数量，
+      #   count_weight=0.5          避免某个大仓库里的小众语言霸榜
       - name: Generate top languages card (light)
         uses: stats-organization/github-readme-stats-action@v2
         with:
           card: top-langs
-          options: username=${{ github.repository_owner }}&layout=compact&langs_count=8&theme=light_github
+          options: "username=${{ github.repository_owner }}&layout=compact&langs_count=8&size_weight=0.5&count_weight=0.5&hide_title=true&hide_border=true&locale=en&theme=light_github"
           path: profile/top-langs-light.svg
           token: ${{ secrets.GITHUB_TOKEN }}
           fail_on_error: "true"
@@ -59,19 +74,19 @@ jobs:
         uses: stats-organization/github-readme-stats-action@v2
         with:
           card: top-langs
-          options: username=${{ github.repository_owner }}&layout=compact&langs_count=8&theme=dark_github
+          options: "username=${{ github.repository_owner }}&layout=compact&langs_count=8&size_weight=0.5&count_weight=0.5&hide_title=true&hide_border=true&locale=en&theme=dark_github"
           path: profile/top-langs-dark.svg
           token: ${{ secrets.GITHUB_TOKEN }}
           fail_on_error: "true"
 
-      # ---------- 固定某个仓库的 pin 卡片 ----------
-      # 按需修改 repo，或直接删掉这两个 step
-      # 注意：repo/gist 卡片用 *_repocard 主题，图标颜色才和 GitHub 一致
+      # ================= pin 卡片 =================
+      # 改 repo= 换仓库；两行都要改，或直接删掉这两个 step
+      # 注意：repo/gist 卡片必须用 *_repocard 主题，图标颜色才和 GitHub 一致
       - name: Generate pin card (light)
         uses: stats-organization/github-readme-stats-action@v2
         with:
           card: pin
-          options: username=${{ github.repository_owner }}&repo=OmniBox&theme=light_github_repocard
+          options: "username=${{ github.repository_owner }}&repo=OmniBox&hide_border=true&theme=light_github_repocard"
           path: profile/pin-omnibox-light.svg
           token: ${{ secrets.GITHUB_TOKEN }}
           fail_on_error: "true"
@@ -80,7 +95,7 @@ jobs:
         uses: stats-organization/github-readme-stats-action@v2
         with:
           card: pin
-          options: username=${{ github.repository_owner }}&repo=OmniBox&theme=dark_github_repocard
+          options: "username=${{ github.repository_owner }}&repo=OmniBox&hide_border=true&theme=dark_github_repocard"
           path: profile/pin-omnibox-dark.svg
           token: ${{ secrets.GITHUB_TOKEN }}
           fail_on_error: "true"

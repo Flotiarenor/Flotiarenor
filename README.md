@@ -17,4 +17,10 @@
   <img src="./profile/top-langs-light.svg" alt="Top languages" />
 </picture>
 
-![Pinned repo](./profile/pin-omnibox.svg)
+<picture>
+  <source
+    srcset="./profile/pin-omnibox-dark.svg"
+    media="(prefers-color-scheme: dark)"
+  />
+  <img src="./profile/pin-omnibox-light.svg" alt="Pinned repo" />
+</picture>
