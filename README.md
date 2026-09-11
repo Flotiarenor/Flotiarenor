@@ -1,4 +1,3 @@
-# Hi, I'm Nanako 👋
 
 <!-- 语言卡由 .github/workflows/grs.yml 每天生成并提交到 profile/ 目录 -->
 <picture>
