@@ -24,8 +24,8 @@ jobs:
       - uses: actions/checkout@v6
 
       # ======================= 语言卡 =======================
-      # 主页唯一的组件。浅色 / 深色各生成一份，README 里用 <picture> 按访客的
-      # 系统主题自动切换 —— 渲染出来仍然只是一个组件。
+      # 主页两张卡之一。浅色 / 深色各生成一份，README 里用 <picture> 按访客的
+      # 系统主题自动切换 —— 渲染出来仍然只是两张卡，不多不少。
       #
       # 参数逐条说明：
       #   layout=compact       紧凑横条，高度最小
@@ -61,6 +61,34 @@ jobs:
           # 与浅色版逐字相同，只把结尾的 theme 换成 dark_github
           options: "username=${{ github.repository_owner }}&layout=compact&langs_count=8&size_weight=0.5&count_weight=0.5&exclude_repo=Python-3.10.13&hide_title=true&hide_border=true&locale=en&theme=dark_github"
           path: profile/top-langs-dark.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fail_on_error: "true"
+
+      # ======================= 总览卡 =======================
+      # 与语言卡出自同一个 action、同一套渲染器，所以配色天然一致，
+      # 也没有额外引入任何第三方服务。
+      #
+      #   show_icons=true      每行前面带图标；去掉就只剩数字，整张卡会显得空
+      #   exclude_repo=...     理由同语言卡：那个 368 MB 的 CPython 副本会把
+      #                        commit 总数抬高好几倍，盖掉真实活跃度
+      #   theme=light_github / dark_github
+      #                        注意这两个主题是 github-stats-extended 独有的，
+      #                        原版 anuraghazra 公共实例不认，会直接返回 500
+      - name: Generate stats card (light)
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: stats
+          options: "username=${{ github.repository_owner }}&show_icons=true&hide_border=true&locale=en&exclude_repo=Python-3.10.13&theme=light_github"
+          path: profile/stats-light.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fail_on_error: "true"
+
+      - name: Generate stats card (dark)
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: stats
+          options: "username=${{ github.repository_owner }}&show_icons=true&hide_border=true&locale=en&exclude_repo=Python-3.10.13&theme=dark_github"
+          path: profile/stats-dark.svg
           token: ${{ secrets.GITHUB_TOKEN }}
           fail_on_error: "true"
 
